@@ -7,6 +7,7 @@ package coursework2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -109,7 +110,7 @@ public class TollRoadMain extends TollRoad{
 //If operation != complete, *regNum* : addFunds failed. CustomerAccount doesnt exist
 //catch(CustomerNotFoundException)
 //else - makeTrip (regNum)
-    public void simulateFromFile(TollRoad road) throws FileNotFoundException{
+    public void simulateFromFile(TollRoad road) throws FileNotFoundException, CustomerNotFoundException{
         
         try{
             File file = new File("transactions.txt");
@@ -122,6 +123,7 @@ public class TollRoadMain extends TollRoad{
                 scanNext = new Scanner(scan.next());
                 scanNext.useDelimiter(",");
                 function = scanNext.next();
+                
                 if(function == "addFunds"){ // if segment starts with addFunds
                     registerNum = scanNext.next(); //save reg num AND amount
                     amount = Integer.parseInt(scanNext.next());
@@ -136,11 +138,17 @@ public class TollRoadMain extends TollRoad{
                 }
                 else // if segment starts with makeTrip
                     registerNum = scanNext.next(); // save only regNum
-                
+                    try{
+                        road.findCustomer(registerNum).makeTrip();
+                        System.out.println(registerNum + ": Trip completed successfully.");
+                    }
+                    catch(InsufficientAccountBalanceException exception){
+                        System.out.println(registerNum + ": makeTrip failed. Insufficient funds.");
+                    }
             }
             
         }
-        catch (Exception CustomerNotFoundException){
+        catch (IOException notFound){
             
         }
     }
