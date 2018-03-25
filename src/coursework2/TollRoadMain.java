@@ -19,10 +19,11 @@ public class TollRoadMain extends TollRoad{
 
      
     
-    public TollRoad initialiseTollRoadFromFile(){
-
+    public static TollRoad initialiseTollRoadFromFile(){
+        TollRoad newRoad = new TollRoad();
+        
         try{
-            TollRoad newRoad = new TollRoad();
+            
             File file = new File("customerData.txt");
             Scanner scan = new Scanner(file);
             scan.useDelimiter("#");
@@ -58,7 +59,7 @@ public class TollRoadMain extends TollRoad{
                 newRoad.addCustomer(cust);  // creating new customer account with car
                 }
                 
-                if (vehicleType.equals("Van")){  //Checking if Van 
+                else if (vehicleType.equals("Van")){  //Checking if Van 
                     CustomerAccount cust = new CustomerAccount(fName, lName, new Van(regNum, make, Integer.parseInt(vehicleInfo)),startingBalance);
                     //Setting the discount type to appropriate
                     if(discountType.equals("STAFF")){
@@ -72,7 +73,7 @@ public class TollRoadMain extends TollRoad{
                 newRoad.addCustomer(cust); // creating new customer account with van
                 }
                 
-                if (vehicleType.equals("Truck")){  //Checking if Truck
+                else {  //Checking if Truck
                     CustomerAccount cust = new CustomerAccount(fName, lName, new Truck(regNum, make, Integer.parseInt(vehicleInfo)),startingBalance);
                     //Setting the discount type to appropriate
                     if(discountType.equals("STAFF")){
@@ -100,7 +101,8 @@ public class TollRoadMain extends TollRoad{
            ex.printStackTrace();
             System.out.println("Couldn't read file... (Intiliatise From File)");
         }
-        return new TollRoad();
+// DOES NOT CREATE NEW TOLL ROAD ?!
+        return newRoad;
     }
     
 // left to do: Read file
@@ -111,12 +113,12 @@ public class TollRoadMain extends TollRoad{
 //If operation != complete, *regNum* : addFunds failed. CustomerAccount doesnt exist
 //catch(CustomerNotFoundException)
 //else - makeTrip (regNum)
-    public void simulateFromFile(TollRoad road) throws FileNotFoundException, CustomerNotFoundException{
+    public static void simulateFromFile(TollRoad road) throws FileNotFoundException, CustomerNotFoundException{
         
         try{
             File file = new File("transactions.txt");
             Scanner scan = new Scanner(file);
-            scan.useDelimiter("\\$");
+            scan.useDelimiter("\\$"); // splitting items where Dollar sign is.
             
             Scanner scanNext;
             String function, registerNum;
@@ -142,7 +144,8 @@ public class TollRoadMain extends TollRoad{
                 else // if segment starts with makeTrip
                     registerNum = scanNext.next(); // save only regNum
                     try{
-                        road.findCustomer(registerNum).makeTrip();
+                        road.chargeCustomer(registerNum);
+                        
                         System.out.println(registerNum + ": Trip completed successfully.");
                     }
                     catch(InsufficientAccountBalanceException exception){
@@ -157,16 +160,21 @@ public class TollRoadMain extends TollRoad{
         catch (IOException notFound){
             System.out.println("Cant read file (from Simulate)");
         }
+        System.out.println("Toll road made " +  road.getMoneyMade() + " cash.");
     }
 
      
    
     public static void main(String[] args) throws FileNotFoundException, CustomerNotFoundException {
+        /*
         TollRoadMain myMoneyMakingScheme = new TollRoadMain();
-        TollRoad tollRoad = new TollRoad();
+        
         myMoneyMakingScheme.initialiseTollRoadFromFile();
         myMoneyMakingScheme.simulateFromFile(tollRoad);
-        System.out.println(tollRoad.moneyMade);
+        System.out.println("Toll road made " +  tollRoad.getMoneyMade() + " cash.");
+        */
+        TollRoadMain myMoneyMakingScheme = new TollRoadMain();
+        simulateFromFile(initialiseTollRoadFromFile());
         
     }
     
