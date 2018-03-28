@@ -15,24 +15,21 @@ import java.util.ArrayList;
  *
  * @author zrt15fsu
  */
-public class TollRoadMain extends TollRoad{
+public class TollRoadMain extends TollRoad {
 
-     
-    
-    public static TollRoad initialiseTollRoadFromFile(){
+    public static TollRoad initialiseTollRoadFromFile() {
         TollRoad newRoad = new TollRoad();
-        
-        try{
-            
+
+        try {
+
             File file = new File("customerData.txt");
             Scanner scan = new Scanner(file);
             scan.useDelimiter("#");
             Scanner nextScan;
             String vehicleType, regNum, vehicleInfo, fName, lName, discountType, make;
             int startingBalance;
-            
-            
-            while(scan.hasNext()){
+
+            while (scan.hasNext()) {
                 nextScan = new Scanner(scan.next());
                 nextScan.useDelimiter(",");
                 //Taking individual variables from file.
@@ -42,51 +39,44 @@ public class TollRoadMain extends TollRoad{
                 lName = nextScan.next();
                 make = nextScan.next();
                 vehicleInfo = nextScan.next();
-                startingBalance =Integer.parseInt(nextScan.next());
+                startingBalance = Integer.parseInt(nextScan.next());
                 discountType = nextScan.next();
-                
-                if (vehicleType.equals("Car")){  //Checking if car
-                    CustomerAccount cust = new CustomerAccount(fName, lName, new Car(regNum, make, Integer.parseInt(vehicleInfo)),startingBalance);
+
+                if (vehicleType.equals("Car")) {  //Checking if car
+                    CustomerAccount cust = new CustomerAccount(fName, lName, new Car(regNum, make, Integer.parseInt(vehicleInfo)), startingBalance);
                     //Setting the discount type to appropriate
-                    if(discountType.equals("STAFF")){
+                    if (discountType.equals("STAFF")) {
                         cust.activateStaffDisc();
-                    }
-                    else if(discountType.equals("FRIENDS_AND_FAMILY")){
+                    } else if (discountType.equals("FRIENDS_AND_FAMILY")) {
                         cust.activateFFDisc();
-                    }
-                    else 
+                    } else {
                         cust.deadctivateDisc();
-                newRoad.addCustomer(cust);  // creating new customer account with car
-                }
-                
-                else if (vehicleType.equals("Van")){  //Checking if Van 
-                    CustomerAccount cust = new CustomerAccount(fName, lName, new Van(regNum, make, Integer.parseInt(vehicleInfo)),startingBalance);
+                    }
+                    newRoad.addCustomer(cust);  // creating new customer account with car
+                } else if (vehicleType.equals("Van")) {  //Checking if Van 
+                    CustomerAccount cust = new CustomerAccount(fName, lName, new Van(regNum, make, Integer.parseInt(vehicleInfo)), startingBalance);
                     //Setting the discount type to appropriate
-                    if(discountType.equals("STAFF")){
+                    if (discountType.equals("STAFF")) {
                         cust.activateStaffDisc();
-                    }
-                    else if(discountType.equals("FRIENDS_AND_FAMILY")){
+                    } else if (discountType.equals("FRIENDS_AND_FAMILY")) {
                         cust.activateFFDisc();
-                    }
-                    else 
+                    } else {
                         cust.deadctivateDisc();
-                newRoad.addCustomer(cust); // creating new customer account with van
-                }
-                
-                else {  //Checking if Truck
-                    CustomerAccount cust = new CustomerAccount(fName, lName, new Truck(regNum, make, Integer.parseInt(vehicleInfo)),startingBalance);
+                    }
+                    newRoad.addCustomer(cust); // creating new customer account with van
+                } else {  //Checking if Truck
+                    CustomerAccount cust = new CustomerAccount(fName, lName, new Truck(regNum, make, Integer.parseInt(vehicleInfo)), startingBalance);
                     //Setting the discount type to appropriate
-                    if(discountType.equals("STAFF")){
+                    if (discountType.equals("STAFF")) {
                         cust.activateStaffDisc();
-                    }
-                    else if(discountType.equals("FRIENDS_AND_FAMILY")){
+                    } else if (discountType.equals("FRIENDS_AND_FAMILY")) {
                         cust.activateFFDisc();
-                    }
-                    else 
+                    } else {
                         cust.deadctivateDisc();
-                newRoad.addCustomer(cust);// creating new customer account with truck
+                    }
+                    newRoad.addCustomer(cust);// creating new customer account with truck
                 }
-              
+
             }
             //Add vehicles to customer
             //Add customer to arraylist
@@ -94,17 +84,14 @@ public class TollRoadMain extends TollRoad{
             //Create car/van/truck based on variables. 
             //Use constructor for the type of vehicle
             //Create new custommer(start with temp cust) 
-            
-                        
-        }
-        catch (Exception ex){
-           ex.printStackTrace();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
             System.out.println("Couldn't read file... (Intiliatise From File)");
         }
-// DOES NOT CREATE NEW TOLL ROAD ?!
-        return newRoad;
+        return newRoad;  // used to be returning NEW tollRoad, instead of the one created in here.
     }
-    
+
 // left to do: Read file
 //If addFunds - cust.addFunds(regNum, amount)
 //try (
@@ -113,69 +100,69 @@ public class TollRoadMain extends TollRoad{
 //If operation != complete, *regNum* : addFunds failed. CustomerAccount doesnt exist
 //catch(CustomerNotFoundException)
 //else - makeTrip (regNum)
-    public static void simulateFromFile(TollRoad road) throws FileNotFoundException, CustomerNotFoundException{
-        
-        try{
+    public static void simulateFromFile(TollRoad road) throws FileNotFoundException, CustomerNotFoundException {
+
+        try {
             File file = new File("transactions.txt");
             Scanner scan = new Scanner(file);
             scan.useDelimiter("\\$"); // splitting items where Dollar sign is.
-            
+
             Scanner scanNext;
-            String function, registerNum;
+            String function;
+            String registerNum = null;
             int amount;
-            while (scan.hasNext()){
-                
+            while (scan.hasNext()) {
+
                 scanNext = new Scanner(scan.next());
                 scanNext.useDelimiter(",");
                 function = scanNext.next();
-                
-                if(function.equals("addFunds")){ // if segment starts with addFunds
+
+                if (function.equals("addFunds")) { // if segment starts with addFunds
                     registerNum = scanNext.next(); //save reg num AND amount
                     amount = Integer.parseInt(scanNext.next());
                     // Adding funds to existing customer if they exist
-                    try{
+                    try {
                         road.findCustomer(registerNum).addFunds(amount);
-                        System.out.println(registerNum +": "+ amount + " added ");
-                    }
-                    catch(CustomerNotFoundException exception){
+                        System.out.println(registerNum + ": " + amount + " added ");
+                        System.out.println(road.getMoneyMade());
+                    } catch (CustomerNotFoundException exception) {
                         System.out.println(registerNum + ": addFunds failed. Customer does not exist...");
                     }
                 }
-                else // if segment starts with makeTrip
+                else  { // if segment starts with makeTrip
                     registerNum = scanNext.next(); // save only regNum
-                    try{
+                    try {
                         road.chargeCustomer(registerNum);
-                        
+
                         System.out.println(registerNum + ": Trip completed successfully.");
-                    }
-                    catch(InsufficientAccountBalanceException exception){
+                        System.out.println(road.getMoneyMade());
+                    } catch (InsufficientAccountBalanceException exception) {
                         System.out.println(registerNum + ": makeTrip failed. Insufficient funds.");
-                    } catch(CustomerNotFoundException ex){
+                    } catch (CustomerNotFoundException ex) {
                         System.out.println(registerNum + ": makeTrip failed. Insufficient funds.");
-                        ex.toString(); 
+                        ex.toString();
                     }
+                }
+
             }
-            
-        }
-        catch (IOException notFound){
+
+        } catch (IOException notFound) {
             System.out.println("Cant read file (from Simulate)");
         }
-        System.out.println("Toll road made " +  road.getMoneyMade() + " cash.");
+        System.out.println("Toll road made " + road.getMoneyMade() + " cash.");
     }
 
-     
-   
     public static void main(String[] args) throws FileNotFoundException, CustomerNotFoundException {
         /*
-        TollRoadMain myMoneyMakingScheme = new TollRoadMain();
-        
-        myMoneyMakingScheme.initialiseTollRoadFromFile();
-        myMoneyMakingScheme.simulateFromFile(tollRoad);
-        System.out.println("Toll road made " +  tollRoad.getMoneyMade() + " cash.");
-        */
+         TollRoadMain myMoneyMakingScheme = new TollRoadMain();
+         TollRoad tollRoad = new TollRoad();
+         myMoneyMakingScheme.initialiseTollRoadFromFile();
+         myMoneyMakingScheme.simulateFromFile(tollRoad);
+         System.out.println("Toll road made " +  tollRoad.getMoneyMade() + " cash.");
+         */
         TollRoadMain myMoneyMakingScheme = new TollRoadMain();
         simulateFromFile(initialiseTollRoadFromFile());
-        
+
     }
-    
+
 }
