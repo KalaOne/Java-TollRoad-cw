@@ -30,9 +30,7 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
 
     // if acc doesnt have "Staff" discount, then set to Friends and family
     public void activateFFDisc() {
-        if (discType != DiscountType.STAFF) {
             discType = DiscountType.FRIENDS_AND_FAMILY;
-        }
     }
 
     //deactivate discount
@@ -70,15 +68,17 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
     // Make trip method, returning the cost of the trip.
     public int makeTrip() throws InsufficientAccountBalanceException {  //CREATE EXCEPTION CLASS!
         int amount = vehicle.calcTripCost();
+        if (accBalance < amount) {
+            throw new InsufficientAccountBalanceException("Not enough money!");
+        }
+        
         if (discType == DiscountType.STAFF) {
             amount = (int) (amount * 0.5);
         } else if (discType == DiscountType.FRIENDS_AND_FAMILY) {
             amount = (int) (amount * 0.9);
         }
 
-        if (accBalance < amount) {
-            throw new InsufficientAccountBalanceException("Not enough money!");
-        }
+        
         accBalance = accBalance - amount;
         return amount;
     }
