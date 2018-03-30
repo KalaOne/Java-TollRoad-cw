@@ -1,14 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Java Coursework Toll Road.
+ * Van class, extending Vehicle.
+ * Author : Kaloyan Valchev 100137489
  */
 package coursework2;
 
-/**
- *
- * @author Home
- */
 public class Van extends Vehicle{
     //int for payload of the van
     private int payLoad = 0;
@@ -29,7 +25,7 @@ public class Van extends Vehicle{
     
     //constructor for setting all values in Van 
     public Van (String regNo, String make, int payLoad){
-        super (regNo, make); // using parent constructor (Vehicle)
+        super (regNo, make); // using parent constructor
         this.payLoad = payLoad;
     }
     
@@ -37,6 +33,7 @@ public class Van extends Vehicle{
     public int getPayLoad(){
         return payLoad;
     }
+// Test main.
     public static void main(String[] args) {
         Vehicle van = new Van("KGZ 15F", "Mercedess", 665);
         System.out.println(van.calcTripCost());

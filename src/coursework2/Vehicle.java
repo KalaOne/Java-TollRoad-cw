@@ -1,14 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Java Coursework Toll Road.
+ * Vehicle class, parrent for other vehicles.
+ * Author : Kaloyan Valchev 100137489
  */
 package coursework2;
 
-/**
- *
- * @author Home
- */
 public abstract class Vehicle {
     //int for make and register number of a vehicle
     public String regNo;
@@ -19,7 +15,7 @@ public abstract class Vehicle {
         this.regNo = regNo;
         this.make  = make;
     }
-    
+    // basic calcTripCost function. Is overriden from other classes
     public abstract int calcTripCost();
 
     //accessor for register no and make

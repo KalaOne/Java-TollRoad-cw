@@ -1,26 +1,21 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Java Coursework Toll Road.
+ * Customer Account class.
+ * Author : Kaloyan Valchev 100137489
  */
 package coursework2;
 
-/**
- *
- * @author Home
- */
 public class CustomerAccount implements Comparable<CustomerAccount>{
-
-
-
+    //eNum for values for discounts
     private enum DiscountType {
         NONE, STAFF, FRIENDS_AND_FAMILY
     }
-
+    //Variables used by customer
     private final String custFName;
     private final String custLName;
     private final Vehicle vehicle;
     private int accBalance = 0;
+    //setting default discount type to be NONE
     private DiscountType discType = DiscountType.NONE;
 
     //Set Staff discount to account
@@ -28,12 +23,12 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
         discType = DiscountType.STAFF;
     }
 
-    // if acc doesnt have "Staff" discount, then set to Friends and family
+    // Set Friends and family discount to account.
     public void activateFFDisc() {
             discType = DiscountType.FRIENDS_AND_FAMILY;
     }
 
-    //deactivate discount
+    //deactivate discount = setting to NONE
     public void deadctivateDisc() {
         discType = DiscountType.NONE;
     }
@@ -42,7 +37,7 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
     public void addFunds(int cash) {
         accBalance += cash;
     }
-    //Constructor for cust.Account passing values
+    //Constructor for cust.Account 
     public CustomerAccount(String custFName, String custLName, Vehicle vehicle, int balance) {
         this.custFName = custFName;
         this.custLName = custLName;
@@ -51,7 +46,7 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
         this.discType = DiscountType.NONE;
 
     }
-
+    //Overriding compareTo method to compare customer accounts and return different value
     @Override
     public int compareTo(CustomerAccount custAcc){
         if(this.vehicle.regNo.compareTo(custAcc.vehicle.regNo) > 0 ){
@@ -68,19 +63,21 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
     // Make trip method, returning the cost of the trip.
     public int makeTrip() throws InsufficientAccountBalanceException {  //CREATE EXCEPTION CLASS!
         int amount = vehicle.calcTripCost();
-        if (accBalance < amount) {
-            throw new InsufficientAccountBalanceException("Not enough money!");
-        }
-        
+        //if discount is STAFF - reducing the price by 50%
         if (discType == DiscountType.STAFF) {
             amount = (int) (amount * 0.5);
+        //if discount is Friends and Family - reducing the price by 10%
         } else if (discType == DiscountType.FRIENDS_AND_FAMILY) {
             amount = (int) (amount * 0.9);
         }
-
-        
+        // If the account balance is less than the cost of the trip
+        //throws exception for insufficient money
+        if (accBalance < amount) {
+            throw new InsufficientAccountBalanceException("Not enough money!");
+        }
+        //reducing the account balance with the cost of the trip.
         accBalance = accBalance - amount;
-        return amount;
+        return amount; // returns the cost of the trip.
     }
     // Accessor methods
     public String getCustFName() {
@@ -102,7 +99,7 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
     public DiscountType getDiscType(){
         return discType;
     }
-
+// Test main.
     public static void main(String[] args){
         CustomerAccount custom = new CustomerAccount("Name", "Not a name",new Car("EH515KX","Porche", 4), 400);
         CustomerAccount custom2 = new CustomerAccount("Pete", "Surname",new Van("Bro12ugh","Ford", 700), 800);

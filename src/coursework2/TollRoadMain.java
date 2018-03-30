@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Java Coursework Toll Road.
+ * Main class for the coursework. Toll Road Main
+ * Author : Kaloyan Valchev 100137489
  */
 package coursework2;
 
@@ -11,26 +11,26 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-/**
- *
- * @author zrt15fsu
- */
 public class TollRoadMain extends TollRoad {
-
+    //Method that reads and creates a toll road from given file.
     public static TollRoad initialiseTollRoadFromFile() {
-        TollRoad newRoad = new TollRoad();
-
+        TollRoad newRoad = new TollRoad(); // creating new tollRoad that will be returned later.
+        //Try catch - in case of errors.
         try {
-
-            File file = new File("customerData.txt");
+            //Setting file path.
+            File file = new File("customerData.txt"); 
+            //Creating a scanner for the given file path
             Scanner scan = new Scanner(file);
+            //Breaking down the file to hash key '#'
             scan.useDelimiter("#");
+            //creating variables to store info from file
             Scanner nextScan;
             String vehicleType, regNum, vehicleInfo, fName, lName, discountType, make;
             int startingBalance;
 
-            while (scan.hasNext()) {
+            while (scan.hasNext()) { // looping through file until there are no next elements left.
                 nextScan = new Scanner(scan.next());
+                //breaking the segment into comas ',' so we can take individual elements.
                 nextScan.useDelimiter(",");
                 //Taking individual variables from file.
                 vehicleType = nextScan.next();
@@ -42,7 +42,8 @@ public class TollRoadMain extends TollRoad {
                 startingBalance = Integer.parseInt(nextScan.next());
                 discountType = nextScan.next();
 
-                if (vehicleType.equals("Car")) {  //Checking if car
+                if (vehicleType.equals("Car")) {  //Checking if Car
+                    //Creating a new customer account with the given values
                     CustomerAccount cust = new CustomerAccount(fName, lName, new Car(regNum, make, Integer.parseInt(vehicleInfo)), startingBalance);
                     //Setting the discount type to appropriate
                     if (discountType.equals("STAFF")) {
@@ -54,6 +55,7 @@ public class TollRoadMain extends TollRoad {
                     }
                     newRoad.addCustomer(cust);  // creating new customer account with car
                 } else if (vehicleType.equals("Van")) {  //Checking if Van 
+                    //Creating a new customer account with the given values
                     CustomerAccount cust = new CustomerAccount(fName, lName, new Van(regNum, make, Integer.parseInt(vehicleInfo)), startingBalance);
                     //Setting the discount type to appropriate
                     if (discountType.equals("STAFF")) {
@@ -65,6 +67,7 @@ public class TollRoadMain extends TollRoad {
                     }
                     newRoad.addCustomer(cust); // creating new customer account with van
                 } else {  //Checking if Truck
+                    //Creating a new customer account with the given values
                     CustomerAccount cust = new CustomerAccount(fName, lName, new Truck(regNum, make, Integer.parseInt(vehicleInfo)), startingBalance);
                     //Setting the discount type to appropriate
                     if (discountType.equals("STAFF")) {
@@ -78,64 +81,52 @@ public class TollRoadMain extends TollRoad {
                 }
 
             }
-            //Add vehicles to customer
-            //Add customer to arraylist
-            //Week 3: UML Class Diagrams - Scanner
-            //Create car/van/truck based on variables. 
-            //Use constructor for the type of vehicle
-            //Create new custommer(start with temp cust) 
-
         } catch (Exception ex) {
             ex.printStackTrace();
             System.out.println("Couldn't read file... (Intiliatise From File)");
         }
-        return newRoad;  // used to be returning NEW tollRoad, instead of the one created in here.
+        return newRoad;  // returning the road with new customer accounts.
     }
 
-// left to do: Read file
-//If addFunds - cust.addFunds(regNum, amount)
-//try (
-//print out *regNum* : *amount* added succesfully
-//
-//If operation != complete, *regNum* : addFunds failed. CustomerAccount doesnt exist
-//catch(CustomerNotFoundException)
-//else - makeTrip (regNum)
     public static void simulateFromFile(TollRoad road) throws FileNotFoundException, CustomerNotFoundException {
-
-        try {
+        //Method that reads given road. Charge customers or adds money to their accounts.
+        try { //Try catch - in case of errors.
+            //Creating a file path
             File file = new File("transactions.txt");
+            //Creating a scanner with the given file path.
             Scanner scan = new Scanner(file);
             scan.useDelimiter("\\$"); // splitting items where Dollar sign is.
-
+            // Creating variables used to store info from file.
             Scanner scanNext;
             String function;
             String registerNum = null;
             int amount;
-            while (scan.hasNext()) {
-
+            while (scan.hasNext()) { //looping through file until there are no next elements left
+                
                 scanNext = new Scanner(scan.next());
                 scanNext.useDelimiter(",");
                 function = scanNext.next();
-
-                if (function.equals("addFunds")) { // if segment starts with addFunds
-                    registerNum = scanNext.next(); //save reg num AND amount
+                
+                if (function.equals("addFunds")) { // if segment starts with 'addFunds'
+                    registerNum = scanNext.next(); //save reg num and amount
                     amount = Integer.parseInt(scanNext.next());
                     // Adding funds to existing customer if they exist
+                    // If not, throws exception
                     try {
                         road.findCustomer(registerNum).addFunds(amount);
                         System.out.println(registerNum + ": " + amount + " added ");
-                        System.out.println(road.getMoneyMade());
+
                     } catch (CustomerNotFoundException exception) {
                         System.out.println(registerNum + ": addFunds failed. Customer does not exist...");
                     }
                 }
                 else  { // if segment starts with makeTrip
                     registerNum = scanNext.next(); // save only regNum
-                    try {
+                    try {// Charging customer if they exist and have enough money
+                        // If not, throws exception
                         road.chargeCustomer(registerNum);
-
                         System.out.println(registerNum + ": Trip completed successfully.");
-                        System.out.println(road.getMoneyMade());
+                        System.out.println("Toll Road has made " + road.getMoneyMade() +" cash so far.");
                     } catch (InsufficientAccountBalanceException exception) {
                         System.out.println(registerNum + ": makeTrip failed. Insufficient funds.");
                     } catch (CustomerNotFoundException ex) {
@@ -143,23 +134,17 @@ public class TollRoadMain extends TollRoad {
                         ex.toString();
                     }
                 }
-
+                
             }
 
         } catch (IOException notFound) {
             System.out.println("Cant read file (from Simulate)");
         }
-        System.out.println("Toll road made " + road.getMoneyMade() + " cash.");
+        System.out.println("\n");
+        System.out.println("Toll road made " + road.getMoneyMade() + " cash. Filthy rich!");
     }
 
     public static void main(String[] args) throws FileNotFoundException, CustomerNotFoundException {
-        /*
-         TollRoadMain myMoneyMakingScheme = new TollRoadMain();
-         TollRoad tollRoad = new TollRoad();
-         myMoneyMakingScheme.initialiseTollRoadFromFile();
-         myMoneyMakingScheme.simulateFromFile(tollRoad);
-         System.out.println("Toll road made " +  tollRoad.getMoneyMade() + " cash.");
-         */
         TollRoadMain myMoneyMakingScheme = new TollRoadMain();
         simulateFromFile(initialiseTollRoadFromFile());
 

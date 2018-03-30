@@ -1,19 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Java Coursework Toll Road.
+ * Car class, extending Vehicle.
+ * Author : Kaloyan Valchev 100137489
  */
 package coursework2;
 
-/**
- *
- * @author Home
- */
 public class Car extends Vehicle {
-    // int for number of seats in a car
+    // integer for number of seats in a car
     private int numOfSeats;
 
-    //overriding the calcTripCost function to return different values than parent
+    //overriding the calcTripCost function to return different values than parrent
     @Override
     public int calcTripCost() {
         if (numOfSeats <= 5)
@@ -26,18 +22,16 @@ public class Car extends Vehicle {
 
     //constructor for setting all values in car
     public Car(String regNo, String make, int numOfSeats) {
-        super(regNo, make);
-        //using parent class (Vehicle) constructor
-//        this.regNo      = regNo;
-//        this.make       = make;
+        super(regNo, make); //using parent class for registerNumber and make
+        
         this.numOfSeats = numOfSeats;
     }
 
-    // accessing the number of seats
+    // accessing method for number of seats
     public int getNumOfSeats() {
         return numOfSeats;
     }
-
+//Test main.
     public static void main(String[] args) {
         Vehicle car = new Car("EK6 70AG", "Hyunday", 7);
         System.out.println(car.calcTripCost());
