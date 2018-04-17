@@ -99,6 +99,11 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
     public DiscountType getDiscType(){
         return discType;
     }
+    @Override
+    public String toString(){
+       return custFName + " " + custLName + " drives " + vehicle + "." + " Their account balance is " 
+               + accBalance + "." + " They are using " + discType + " discount." ;
+    }
 // Test main.
     public static void main(String[] args){
         CustomerAccount custom = new CustomerAccount("Name", "Not a name",new Car("EH515KX","Porche", 4), 400);
@@ -112,6 +117,8 @@ public class CustomerAccount implements Comparable<CustomerAccount>{
         System.out.println(custom3.compareTo(custom4)); //1
         System.out.println(custom4.compareTo(custom)); //1
         System.out.println(custom5.compareTo(custom4)); //0
+        System.out.println(custom4);
+        
     }
    
 }

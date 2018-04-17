@@ -25,5 +25,10 @@ public abstract class Vehicle {
     public String getMake(){
         return make;
     }
+    
+    @Override
+    public String toString(){
+       return "Register number is " + regNo + " and the make is " + make;
+    }
 }
 

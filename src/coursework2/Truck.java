@@ -29,6 +29,10 @@ public class Truck extends Vehicle{
    {
        return numTrailer;
    }
+   @Override
+    public String toString(){
+       return "Register number is " + regNo + " and the make is " + make + "and the number of trailers are " + numTrailer;
+    }
 //Test main.
     public static void main(String[] args) {
         Vehicle truck = new Truck("EK6 70AG", "Hyunday", 3);

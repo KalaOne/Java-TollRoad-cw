@@ -31,6 +31,10 @@ public class Car extends Vehicle {
     public int getNumOfSeats() {
         return numOfSeats;
     }
+    @Override
+    public String toString(){
+       return "Register number is " + regNo + " and the make is " + make + "and the number of seats are " + numOfSeats;
+    }
 //Test main.
     public static void main(String[] args) {
         Vehicle car = new Car("EK6 70AG", "Hyunday", 7);

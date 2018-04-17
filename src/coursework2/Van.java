@@ -33,6 +33,10 @@ public class Van extends Vehicle{
     public int getPayLoad(){
         return payLoad;
     }
+    @Override
+    public String toString(){
+       return "Register number is " + regNo + " and the make is " + make + "and the payload is " + payLoad;
+    }
 // Test main.
     public static void main(String[] args) {
         Vehicle van = new Van("KGZ 15F", "Mercedess", 665);
